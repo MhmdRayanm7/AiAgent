@@ -1,29 +1,30 @@
-# calculator/pkg/calculator.py
+from collections.abc import Callable
+
 
 class Calculator:
-    def __init__(self):
-        self.operators = {
+    def __init__(self) -> None:
+        self.operators: dict[str, Callable[[float, float], float]] = {
             "+": lambda a, b: a + b,
             "-": lambda a, b: a - b,
             "*": lambda a, b: a * b,
             "/": lambda a, b: a / b,
         }
-        self.precedence = {
+        self.precedence: dict[str, int] = {
             "+": 1,
             "-": 1,
             "*": 2,
             "/": 2,
         }
 
-    def evaluate(self, expression):
+    def evaluate(self, expression: str) -> float | None:
         if not expression or expression.isspace():
             return None
         tokens = expression.strip().split()
         return self._evaluate_infix(tokens)
 
-    def _evaluate_infix(self, tokens):
-        values = []
-        operators = []
+    def _evaluate_infix(self, tokens: list[str]) -> float:
+        values: list[float] = []
+        operators: list[str] = []
 
         for token in tokens:
             if token in self.operators:
@@ -48,7 +49,7 @@ class Calculator:
 
         return values[0]
 
-    def _apply_operator(self, operators, values):
+    def _apply_operator(self, operators: list[str], values: list[float]) -> None:
         if not operators:
             return
 
